@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MVCProject.Models;
 
-public partial class Program
+public partial class PhoneProgram
 {
     [Key]
     [StringLength(50)]

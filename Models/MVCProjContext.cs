@@ -25,7 +25,7 @@ public partial class MVCProjContext : DbContext
 
     public virtual DbSet<Phone> Phones { get; set; }
 
-    public virtual DbSet<Program> Programs { get; set; }
+    public virtual DbSet<PhoneProgram> Programs { get; set; }
 
     public virtual DbSet<Seller> Sellers { get; set; }
 
@@ -33,7 +33,7 @@ public partial class MVCProjContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=VIVOBOOK;Database=mvcproject;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server= !!!! ;Database=mvcproject;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -87,7 +87,7 @@ public partial class MVCProjContext : DbContext
             entity.HasKey(e => e.PhoneNumber).HasName("PK__Phones__85FB4E3908350722");
         });
 
-        modelBuilder.Entity<Program>(entity =>
+        modelBuilder.Entity<PhoneProgram>(entity =>
         {
             entity.HasKey(e => e.ProgramName).HasName("PK__Programs__4F92571127F01944");
         });
