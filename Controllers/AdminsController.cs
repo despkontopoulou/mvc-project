@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,10 +20,28 @@ namespace MVCProject.Controllers
         }
 
         // GET: Admins
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
+            if (id == null)
+            {
+                //return NotFound();
+            }
+            
+            var userId = await _context.Admins
+                .Where(Admin => Admin.UserId == id)
+                .FirstOrDefaultAsync();
+
             var mVCProjContext = _context.Admins.Include(a => a.User);
-            return View(await mVCProjContext.ToListAsync());
+
+            if (userId == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(await mVCProjContext.ToListAsync());
+            }
+
         }
 
         // GET: Admins/Details/5

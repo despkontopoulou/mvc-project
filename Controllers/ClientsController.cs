@@ -19,11 +19,25 @@ namespace MVCProject.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
+            if (id == null) {
+                return NotFound();
+            }
             var mVCProjContext = _context.Clients.Include(c => c.PhoneNumberNavigation).Include(c => c.User);
-            return View(await mVCProjContext.ToListAsync());
+            var userId = await _context.Clients
+                .Where(Client => Client.UserId == id)
+                .FirstOrDefaultAsync();
+            if (userId == null) {
+                return NotFound();
+            }
+            else
+            {
+                return View(await mVCProjContext.ToListAsync());
+            }
+
         }
+        
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)

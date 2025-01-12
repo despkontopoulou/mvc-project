@@ -18,12 +18,37 @@ namespace MVCProject.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Index(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var mVCProjContext = _context.Sellers.Include(s => s.User);
+            var userId = await _context.Sellers
+                .Where(Client => Client.UserId == id)
+                .FirstOrDefaultAsync();
+            if (userId == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(await mVCProjContext.ToListAsync());
+            }
+
+
+        }
+
+
+        /*
         // GET: Sellers
         public async Task<IActionResult> Index()
         {
             var mVCProjContext = _context.Sellers.Include(s => s.User);
             return View(await mVCProjContext.ToListAsync());
         }
+        */
 
         // GET: Sellers/Details/5
         public async Task<IActionResult> Details(int? id)

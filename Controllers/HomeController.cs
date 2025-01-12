@@ -15,7 +15,6 @@ namespace MVCProject.Controllers
 
         public IActionResult Index()
         {
-            TempData["loginMessage"] = "Login successful!";
             return View();
         }
 
