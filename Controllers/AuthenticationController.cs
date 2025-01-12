@@ -17,6 +17,8 @@ namespace MVCProject.Controllers
         {
             return View();
         }
+
+
         //Post:Login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -25,18 +27,21 @@ namespace MVCProject.Controllers
             var user= await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null)
             {
-                return Unauthorized("Invalid username");
+                TempData["LoginMessage"] = "Invalid username";
+                return RedirectToAction("Index", "Authentication");
             }
 
-            // Verify the password
             bool isPasswordValid = VerifyPassword(password, user.PasswordHash);
 
             if (isPasswordValid)
             {
-                return Ok("Login successful");
+                //redirect and show message
+                TempData["LoginMessage"] = "Login Succesfull";
+                return RedirectToAction("Index", "Home");
             }
 
-            return Unauthorized("Invalid username or password");
+            TempData["LoginMessage"] = "Invalid credentials";
+            return RedirectToAction("Index", "Authentication"); ;
 
         }
         public static bool VerifyPassword(string password, string passwordHash) {
@@ -44,16 +49,16 @@ namespace MVCProject.Controllers
             var result = passwordHasher.VerifyHashedPassword(null, passwordHash, password);
             return result == PasswordVerificationResult.Success;
         }
-        public static string HashPassword(string password)
-        {
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                throw new ArgumentException("Password cannot be null or empty", nameof(password));
-            }
+        //public static string HashPassword(string password)
+        //{
+        //    if (string.IsNullOrWhiteSpace(password))
+        //    {
+        //        throw new ArgumentException("Password cannot be null or empty", nameof(password));
+        //    }
 
-            var passwordHasher = new PasswordHasher<object>();
-            return passwordHasher.HashPassword(null, password);
-        }
+        //    var passwordHasher = new PasswordHasher<object>();
+        //    return passwordHasher.HashPassword(null, password);
+        //}
     }
 
 }
