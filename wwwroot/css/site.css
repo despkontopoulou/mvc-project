@@ -17,6 +17,15 @@ html {
   min-height: 100%;
 }
 
+
 body {
-  margin-bottom: 60px;
+    background-color: #f5f7fa;
+    margin: 0;
+    margin-bottom: 60px;
+    /*
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    */
 }

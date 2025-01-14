@@ -72,7 +72,7 @@ namespace MVCProject.Controllers
         // GET: Sellers/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username");
             return View();
         }
 
@@ -81,17 +81,29 @@ namespace MVCProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SellerId,UserId")] Seller seller)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Username,PasswordHash,Property")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(seller);
-                await _context.SaveChangesAsync();
+                // Create the User
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync(); 
+
+                // Create seller with userId
+                var seller = new Seller
+                {
+                    UserId = user.UserId 
+                };
+
+                _context.Sellers.Add(seller);
+                await _context.SaveChangesAsync(); 
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", seller.UserId);
-            return View(seller);
+
+            return View(user);
         }
+       
 
         // GET: Sellers/Edit/5
         public async Task<IActionResult> Edit(int? id)
