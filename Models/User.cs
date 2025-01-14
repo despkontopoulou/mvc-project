@@ -33,8 +33,6 @@ public partial class User
     public string? Property { get; set; }
 
     [Display(Name = "Password")]
-    [MinLength(8)]
-    [MaxLength(15)]
     public string PasswordHash { get; set; } = null!;
 
     [InverseProperty("User")]

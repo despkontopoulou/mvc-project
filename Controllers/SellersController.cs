@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -86,6 +87,7 @@ namespace MVCProject.Controllers
             if (ModelState.IsValid)
             {
                 // Create the User
+                user.PasswordHash = AuthenticationController.HashPassword(user.PasswordHash); 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync(); 
 

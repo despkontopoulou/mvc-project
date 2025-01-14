@@ -57,16 +57,16 @@ namespace MVCProject.Controllers
             var result = passwordHasher.VerifyHashedPassword(null, passwordHash, password);
             return result == PasswordVerificationResult.Success;
         }
-        //public static string HashPassword(string password)
-        //{
-        //    if (string.IsNullOrWhiteSpace(password))
-        //    {
-        //        throw new ArgumentException("Password cannot be null or empty", nameof(password));
-        //    }
+        public static string HashPassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException("Password cannot be null or empty", nameof(password));
+            }
 
-        //    var passwordHasher = new PasswordHasher<object>();
-        //    return passwordHasher.HashPassword(null, password);
-        //}
+            var passwordHasher = new PasswordHasher<object>();
+            return passwordHasher.HashPassword(null, password);
+        }
     }
 
 }
