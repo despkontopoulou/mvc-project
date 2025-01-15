@@ -25,10 +25,10 @@ namespace MVCProject.Controllers
                 return NotFound();
             }
             var mVCProjContext = _context.Clients.Include(c => c.PhoneNumberNavigation).Include(c => c.User);
-            var userId = await _context.Clients
+            var client = await _context.Clients
                 .Where(Client => Client.UserId == id)
                 .FirstOrDefaultAsync();
-            if (userId == null) {
+            if (client == null) {
                 return NotFound();
             }
             else
