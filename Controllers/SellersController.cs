@@ -19,23 +19,24 @@ namespace MVCProject.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
+            string strId = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(strId) || !int.TryParse(strId, out int id))
             {
-                return NotFound();
+                return RedirectToAction("Login", "Authentication"); // redirect to login if session is invalid
             }
-            var mVCProjContext = _context.Sellers.Include(s => s.User);
-            var userId = await _context.Sellers
-                .Where(Client => Client.UserId == id)
-                .FirstOrDefaultAsync();
-            if (userId == null)
+
+            var seller = await _context.Sellers
+                .Include(s => s.User)
+                .FirstOrDefaultAsync(s => s.UserId == id);
+            if (seller == null)
             {
                 return NotFound();
             }
             else
             {
-                return View(await mVCProjContext.ToListAsync());
+                return View(seller);
             }
 
 

@@ -20,26 +20,29 @@ namespace MVCProject.Controllers
         }
 
         // GET: Admins
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
+            string strId = HttpContext.Session.GetString("UserId");
+
+
+            if (string.IsNullOrEmpty(strId) || !int.TryParse(strId, out int id))
             {
-                //return NotFound();
+                return RedirectToAction("Login", "Authentication"); // redirect to login if session is invalid
             }
-            
-            var userId = await _context.Admins
-                .Where(Admin => Admin.UserId == id)
-                .FirstOrDefaultAsync();
 
-            var mVCProjContext = _context.Admins.Include(a => a.User);
 
-            if (userId == null)
+            var admin = await _context.Admins
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.UserId ==id);
+
+
+            if (admin == null)
             {
                 return NotFound();
             }
             else
             {
-                return View(await mVCProjContext.ToListAsync());
+                return View(admin);
             }
 
         }

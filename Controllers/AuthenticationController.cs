@@ -39,6 +39,8 @@ namespace MVCProject.Controllers
             if (isPasswordValid)
             {
                 // Successful Login
+                HttpContext.Session.SetString("UserId", user.UserId.ToString());//set session info
+                HttpContext.Session.SetString("UserRole", user.Property);
                 var routeValues = new RouteValueDictionary {
                     { "id", user.UserId }
                 };

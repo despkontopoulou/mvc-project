@@ -19,25 +19,28 @@ namespace MVCProject.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index()
         {
-            if (id == null) {
-                return NotFound();
+            string strId = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(strId) || !int.TryParse(strId, out int id))
+            {
+                return RedirectToAction("Login", "Authentication"); // redirect to login if session is invalid
             }
-            var mVCProjContext = _context.Clients.Include(c => c.PhoneNumberNavigation).Include(c => c.User);
-            var userId = await _context.Clients
-                .Where(Client => Client.UserId == id)
-                .FirstOrDefaultAsync();
-            if (userId == null) {
+
+            var client = await _context.Clients
+                .Include(c=>c.User)
+                .FirstOrDefaultAsync(c => c.UserId == id);
+            if (client == null) {
                 return NotFound();
             }
             else
             {
-                return View(await mVCProjContext.ToListAsync());
+                return View(client);
             }
+           
 
         }
-        
+
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)

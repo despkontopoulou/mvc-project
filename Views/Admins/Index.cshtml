@@ -1,35 +1,20 @@
-﻿@model IEnumerable<MVCProject.Models.Admin>
+﻿@model MVCProject.Models.Admin
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<h1>Index</h1>
+<div class="text-center">
+    <h1>Welcome, @Model.User.FirstName @Model.User.LastName</h1>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AdminId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AdminId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AdminId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="text-center">
+        <a class="btn btn-primary w-100 mb-3" asp-action="CreateSeller">Create New Seller</a>
+        <br>
+        <a class="btn btn-success w-100 mb-3" asp-action="CreateProgram">Create New Program</a>
+        <br>
+        <a class="btn btn-warning w-100 mb-3" asp-action="EditProgram">Edit Program</a>
+    </div>
+</div>
+
