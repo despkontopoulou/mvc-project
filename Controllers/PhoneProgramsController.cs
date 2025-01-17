@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCProject.Models;
+using MVCProject.ViewModels;
 
 namespace MVCProject.Controllers
 {
@@ -53,13 +54,19 @@ namespace MVCProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProgramName,Benefits,Charge")] PhoneProgram phoneProgram)
+        public async Task<IActionResult> Create(PhoneProgramViewModel phoneProgram)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(phoneProgram);
+                var program = new PhoneProgram//create program
+                {
+                    ProgramName = phoneProgram.ProgramName,
+                    Benefits = phoneProgram.Benefits,
+                    Charge = phoneProgram.Charge
+                };
+                _context.Add(program);//save to db
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Admins");
             }
             return View(phoneProgram);
         }
