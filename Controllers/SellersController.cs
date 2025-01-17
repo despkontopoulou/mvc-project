@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVCProject.Models;
+using MVCProject.ViewModels;
 
 namespace MVCProject.Controllers
 {
@@ -43,14 +44,6 @@ namespace MVCProject.Controllers
         }
 
 
-        /*
-        // GET: Sellers
-        public async Task<IActionResult> Index()
-        {
-            var mVCProjContext = _context.Sellers.Include(s => s.User);
-            return View(await mVCProjContext.ToListAsync());
-        }
-        */
 
         // GET: Sellers/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -74,39 +67,43 @@ namespace MVCProject.Controllers
         // GET: Sellers/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username");
             return View();
         }
 
+        
         // POST: Sellers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Username,PasswordHash,Property")] User user)
+        public async Task<IActionResult> Create(UserSellerViewModel viewModel)
         {
             if (ModelState.IsValid)
-            {
-                // Create the User
-                user.PasswordHash = AuthenticationController.HashPassword(user.PasswordHash); 
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync(); 
+            {//create and save user
+                var user = new User
+                {
 
-                // Create seller with userId
+                    FirstName = viewModel.FirstName,
+                    LastName = viewModel.LastName,
+                    Username = viewModel.Username,
+                    PasswordHash = AuthenticationController.HashPassword(viewModel.Password),
+                    Property = "Seller"//assign seller role
+                };
+                _context.Users.Add(user);//save to db
+                await _context.SaveChangesAsync();
+
+                //create and save seller
                 var seller = new Seller
                 {
-                    UserId = user.UserId 
+                    UserId = user.UserId
                 };
-
                 _context.Sellers.Add(seller);
-                await _context.SaveChangesAsync(); 
-
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index","Admins");
             }
 
-            return View(user);
+            return View(viewModel);
         }
-       
 
         // GET: Sellers/Edit/5
         public async Task<IActionResult> Edit(int? id)
