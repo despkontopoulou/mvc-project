@@ -17,6 +17,7 @@ namespace MVCProject.ViewModels
         [Column(TypeName = "decimal(5, 2)")]
         [Range(0, 999.99, ErrorMessage = "Charge must be between 0 and 999.99.")]
         [Required(ErrorMessage = "Charge is required.")]
-        public decimal Charge { get; set; }
+        [DataType(DataType.Currency)]
+        public decimal? Charge { get; set; }
     }
 }

@@ -72,19 +72,28 @@ namespace MVCProject.Controllers
         }
 
         // GET: PhonePrograms/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string programName)
         {
-            if (id == null)
-            {
+            if (string.IsNullOrEmpty(programName)) { 
                 return NotFound();
             }
 
-            var phoneProgram = await _context.Programs.FindAsync(id);
+            var phoneProgram = await _context.Programs.FirstOrDefaultAsync(p => p.ProgramName == programName);
+            
             if (phoneProgram == null)
             {
                 return NotFound();
             }
-            return View(phoneProgram);
+
+            var phoneProgramViewModel = new PhoneProgramViewModel
+            {
+                ProgramName= phoneProgram.ProgramName,
+                Benefits= phoneProgram.Benefits,
+                Charge = phoneProgram.Charge
+
+            };
+
+            return View(phoneProgramViewModel);
         }
 
         // POST: PhonePrograms/Edit/5
@@ -92,9 +101,9 @@ namespace MVCProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ProgramName,Benefits,Charge")] PhoneProgram phoneProgram)
+        public async Task<IActionResult> Edit(string programName, PhoneProgramViewModel phoneProgramViewModel)
         {
-            if (id != phoneProgram.ProgramName)
+            if (programName != phoneProgramViewModel.ProgramName)
             {
                 return NotFound();
             }
@@ -103,12 +112,20 @@ namespace MVCProject.Controllers
             {
                 try
                 {
+                    var phoneProgram = await _context.Programs.FirstOrDefaultAsync(p =>p.ProgramName == programName);
+                    if (phoneProgram == null) {
+                        return NotFound();
+                    }
+
+                    phoneProgram.Benefits = phoneProgramViewModel.Benefits;
+                    phoneProgram.Charge = phoneProgramViewModel.Charge;
+
                     _context.Update(phoneProgram);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PhoneProgramExists(phoneProgram.ProgramName))
+                    if (!PhoneProgramExists(phoneProgramViewModel.ProgramName))
                     {
                         return NotFound();
                     }
@@ -119,7 +136,7 @@ namespace MVCProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(phoneProgram);
+            return View(phoneProgramViewModel);
         }
 
         // GET: PhonePrograms/Delete/5

@@ -1,41 +1,31 @@
 ﻿@model IEnumerable<MVCProject.Models.PhoneProgram>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Phone Programs";
 }
 
-<h1>Index</h1>
+<h1>Phone Programs</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Benefits)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Charge)
-            </th>
-            <th></th>
+            <th>Program Name</th>
+            <th>Benefits</th>
+            <th>Charge</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Benefits)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Charge)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProgramName">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProgramName">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProgramName">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var program in Model)
+        {
+            <tr>
+                <td>@program.ProgramName</td>
+                <td>@program.Benefits</td>
+                <td>@program.Charge</td>
+                <td>
+                    <a asp-action="Edit" asp-route-programName="@program.ProgramName" class="btn btn-primary">Edit</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
