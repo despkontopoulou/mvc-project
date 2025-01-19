@@ -1,44 +1,29 @@
 ﻿@model IEnumerable<MVCProject.Models.Bill>
 
 @{
-    ViewData["Title"] = "Clients Bill Information";
+    ViewData["Title"] = "Your Bills";
 }
 
-<h1>Clients View Bill Information</h1>
+<h1>Your Bills</h1>
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Costs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumberNavigation)
-                @*@Html.DisplayNameFor(model => model.PhoneNumber)*@
-            </th>
-            <th></th>
+            <th>Phone Number</th>
+            <th>Cost of Bill</th>
+            <th>Billing Details</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Costs) Euro
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumberNavigation.PhoneNumber)
-                    @*@Html.DisplayFor(modelItem => item.PhoneNumber)*@
-
-            </td>
-            @*
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BillId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BillId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BillId">Delete</a>
-            </td>
-            *@
-            
-        </tr>
-}
+        @foreach (var bill in Model)
+        {
+            <tr>
+                <td>@bill.PhoneNumber</td>
+                <td>@bill.Costs</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@bill.BillId" class="btn btn-info">View Details</a>                   
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

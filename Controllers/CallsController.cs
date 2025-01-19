@@ -21,7 +21,18 @@ namespace MVCProject.Controllers
         // GET: Calls
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Calls.ToListAsync());
+            string phoneNumber = HttpContext.Session.GetString("PhoneNumber");
+
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return RedirectToAction("Login", "Authentication"); 
+            }
+
+           var calls = _context.Calls
+             .Where(c => c.Bills.Any(b => b.PhoneNumber == phoneNumber)) // Filters calls by phone number linked to bills
+             .ToList();
+
+            return View(calls); // Pass the ViewModel to the view
         }
 
         // GET: Calls/Details/5

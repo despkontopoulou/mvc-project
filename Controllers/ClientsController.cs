@@ -22,14 +22,16 @@ namespace MVCProject.Controllers
         public async Task<IActionResult> Index()
         {
             string strId = HttpContext.Session.GetString("UserId");
+
             if (string.IsNullOrEmpty(strId) || !int.TryParse(strId, out int id))
             {
                 return RedirectToAction("Login", "Authentication"); // redirect to login if session is invalid
             }
 
             var client = await _context.Clients
-                .Include(c=>c.User)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.UserId == id);
+            HttpContext.Session.SetString("PhoneNumber", client.PhoneNumber);
             if (client == null) {
                 return NotFound();
             }

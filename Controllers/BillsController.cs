@@ -21,8 +21,17 @@ namespace MVCProject.Controllers
         // GET: Bills
         public async Task<IActionResult> Index()
         {
-            var mVCProjContext = _context.Bills.Include(b => b.PhoneNumberNavigation);
-            return View(await mVCProjContext.ToListAsync());
+            string phoneNumber = HttpContext.Session.GetString("PhoneNumber");
+            if (string.IsNullOrEmpty(phoneNumber)) 
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
+            var bills = await _context.Bills
+                .Where(b => b.PhoneNumber == phoneNumber)
+                .Include(b => b.PhoneNumberNavigation)
+                .ToListAsync();
+
+            return View(bills);
         }
 
         // GET: Bills/Details/5
